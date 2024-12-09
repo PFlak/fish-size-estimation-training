@@ -186,3 +186,20 @@ class FishSizeEstimationDataset(utils.Dataset):
         else:
             super(self.__class__, self).image_reference(image_id)
 
+def train(model):
+    """Train the model."""
+    # Training dataset.
+    dataset_train = FishSizeEstimationDataset()
+    dataset_train.load_fishsizeestimation(args.dataset, "train")
+    dataset_train.prepare()
+
+    # Validation dataset
+    dataset_val = FishSizeEstimationDataset()
+    dataset_val.load_fishsizeestimation(args.dataset, "val")
+    dataset_val.prepare()
+
+    print("Training network heads")
+    model.train(dataset_train, dataset_val,
+                learning_rate=config.LEARNING_RATE,
+                epochs=65,
+                layers='heads')
